@@ -1,0 +1,30 @@
+{
+  "name": "webgrade",
+  "version": "1.0.0",
+  "description": "Live Website Quality & AI-Design Analyzer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --watch server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.x"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@sparticuz/chromium": "^131.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.3",
+    "lighthouse": "^12.2.1",
+    "playwright": "^1.63.0"
+  },
+  "keywords": [
+    "website-analyzer",
+    "lighthouse",
+    "playwright",
+    "gemini",
+    "design-analysis"
+  ],
+  "license": "MIT"
+}

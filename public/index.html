@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebGrade — Website Quality & Design Analyzer</title>
+  <meta name="description" content="Paste your live website URL and get a visual, UX, accessibility, performance, and AI-design analysis." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Landing -->
+    <section id="landing" class="landing">
+      <header class="site-header">
+        <div class="logo">
+          <span class="logo-mark">WG</span>
+          <span class="logo-text">WebGrade</span>
+        </div>
+        <nav class="header-nav">
+          <a href="#how-it-works">How it works</a>
+          <a href="https://github.com" target="_blank" rel="noopener" class="btn-ghost">GitHub</a>
+        </nav>
+      </header>
+
+      <div class="hero">
+        <p class="eyebrow">Visual intelligence for modern websites</p>
+        <h1>How Good Is Your Website?</h1>
+        <p class="hero-sub">
+          Paste your live website URL and get a visual, UX, accessibility, performance, and AI-design analysis in seconds.
+        </p>
+
+        <form id="analyze-form" class="analyze-form" novalidate>
+          <div class="input-wrap">
+            <input
+              type="url"
+              id="url-input"
+              placeholder="Paste your website URL"
+              autocomplete="url"
+              required
+              aria-label="Website URL"
+            />
+            <button type="submit" id="analyze-btn" class="btn-primary">
+              Analyze Website
+            </button>
+          </div>
+          <p class="form-hint">Works with Vercel, Netlify, GitHub Pages, and any public website.</p>
+          <p id="form-error" class="form-error" hidden></p>
+        </form>
+      </div>
+
+      <section id="how-it-works" class="how-it-works">
+        <h2>What WebGrade actually does</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">01</span>
+            <h3>Renders the real page</h3>
+            <p>Opens your live site in a real browser at desktop and mobile viewports. No source-code guessing.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">02</span>
+            <h3>Measures what matters</h3>
+            <p>Captures screenshots, runs Lighthouse, and extracts structural signals from the rendered result.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">03</span>
+            <h3>Analyzes visual quality</h3>
+            <p>AI inspects hierarchy, typography, color, spacing, responsiveness, and common AI-builder patterns.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">04</span>
+            <h3>Delivers an actionable report</h3>
+            <p>Clear scores, concrete strengths, prioritized improvements, and estimated opportunities.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <p>We don't just check your code. We analyze what your users actually see.</p>
+      </footer>
+    </section>
+
+    <!-- Loading -->
+    <section id="loading" class="loading-screen" hidden>
+      <div class="loading-card">
+        <div class="loading-logo">WG</div>
+        <h2>Analyzing your website</h2>
+        <p class="loading-url" id="loading-url"></p>
+        <ul class="progress-stages" id="progress-stages">
+          <li data-stage="check">Checking website</li>
+          <li data-stage="open">Opening website</li>
+          <li data-stage="desktop">Rendering desktop version</li>
+          <li data-stage="mobile">Rendering mobile version</li>
+          <li data-stage="lighthouse">Running Lighthouse</li>
+          <li data-stage="visual">Analyzing visual design</li>
+          <li data-stage="ux">Analyzing UX</li>
+          <li data-stage="ai">Checking AI-like design patterns</li>
+          <li data-stage="report">Generating report</li>
+        </ul>
+        <p class="loading-note">This usually takes 20–45 seconds depending on the site.</p>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="results" class="results" hidden>
+      <header class="results-header">
+        <div class="logo" id="back-home">
+          <span class="logo-mark">WG</span>
+          <span class="logo-text">WebGrade</span>
+        </div>
+        <button id="new-analysis" class="btn-secondary">New Analysis</button>
+      </header>
+
+      <div class="results-inner">
+        <!-- Overview -->
+        <div class="overview-card">
+          <div class="overview-meta">
+            <span class="analyzed-label">Analyzed</span>
+            <a id="result-url" href="#" target="_blank" rel="noopener" class="result-url"></a>
+            <span id="result-time" class="result-time"></span>
+          </div>
+          <div class="score-row">
+            <div class="score-block primary">
+              <div class="score-value" id="overall-score">—</div>
+              <div class="score-label">Website Quality Score</div>
+            </div>
+            <div class="score-block secondary">
+              <div class="score-value" id="ai-like-score">—</div>
+              <div class="score-label">AI-Like Design Score</div>
+              <p class="score-note" id="ai-like-note"></p>
+            </div>
+          </div>
+          <p class="summary-text" id="summary-text"></p>
+        </div>
+
+        <!-- Screenshots -->
+        <div class="section-card">
+          <div class="section-header">
+            <h2>Page Preview</h2>
+            <div class="tab-group" role="tablist">
+              <button class="tab active" data-view="desktop" role="tab" aria-selected="true">Desktop</button>
+              <button class="tab" data-view="mobile" role="tab" aria-selected="false">Mobile</button>
+            </div>
+          </div>
+          <div class="screenshot-frame">
+            <img id="screenshot-img" alt="Website screenshot" />
+          </div>
+        </div>
+
+        <!-- Category Scores -->
+        <div class="section-card">
+          <h2>Category Scores</h2>
+          <div class="category-list" id="category-list"></div>
+        </div>
+
+        <!-- Strengths -->
+        <div class="section-card">
+          <h2>What Works Well</h2>
+          <div class="strengths-list" id="strengths-list"></div>
+        </div>
+
+        <!-- Improvements -->
+        <div class="section-card">
+          <h2>What Needs Improvement</h2>
+          <div class="improvements-list" id="improvements-list"></div>
+        </div>
+
+        <!-- AI Insights -->
+        <div class="section-card">
+          <h2>AI Insights</h2>
+          <div class="insights-list" id="insights-list"></div>
+        </div>
+
+        <!-- Improvement Opportunities -->
+        <div class="section-card">
+          <h2>Estimated Improvement Opportunities</h2>
+          <p class="section-note">These are estimated potential gains based on the issues found. They are not guaranteed score increases.</p>
+          <div class="opportunities-list" id="opportunities-list"></div>
+        </div>
+
+        <!-- AI-Like Design -->
+        <div class="section-card">
+          <h2>AI-Like Design Analysis</h2>
+          <p class="section-note">
+            This measures how strongly the visual design resembles common AI-generated or AI-builder design patterns.
+            It does not determine whether AI was actually used to create the website.
+          </p>
+          <div class="ai-like-detail">
+            <div class="ai-like-score-display">
+              <span id="ai-like-detail-score">—</span>
+              <span>/ 100</span>
+            </div>
+            <p id="ai-like-reasoning" class="ai-like-reasoning"></p>
+          </div>
+        </div>
+
+        <!-- Lighthouse -->
+        <div class="section-card">
+          <h2>Performance & Lighthouse</h2>
+          <div id="lighthouse-section"></div>
+        </div>
+
+        <!-- Detailed categories (progressive) -->
+        <div class="section-card">
+          <h2>Detailed Analysis</h2>
+          <div id="detailed-analysis"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Error overlay -->
+    <div id="error-overlay" class="error-overlay" hidden>
+      <div class="error-card">
+        <h2>Analysis failed</h2>
+        <p id="error-message"></p>
+        <button id="error-retry" class="btn-primary">Try again</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
